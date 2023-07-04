@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Http\Request; 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -32,9 +32,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        
+
         $roles = Role::all();
-        // dd($roles);        
+        // dd($roles);
         return view('admin.users.create', compact('roles'));
         // return view('admin.users.create');
     }
@@ -46,17 +46,17 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {         
+    {
 
         $validador = Validator::make($request->all(), [
             'dni' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required', 
+            'password' => 'required',
         ]);
 
         // dd($request->all());
-        
-        
+
+
         if($validador->fails())
         {
             // return response()->json(['status_code' => 400, 'message' => 'completa los campos']);
@@ -71,19 +71,19 @@ class UserController extends Controller
         $user->apellido_paterno = $request->apellido_paterno;
         $user->apellido_materno = $request->apellido_materno;
         $user->celular = $request->celular;
-        $user->usuario = $request->usuario;
+        // $user->usuario = $request->usuario;
         $user->email = $request->email;
-        $user->password = Hash::make( $request->password ); 
+        $user->password = Hash::make( $request->password );
         $user->tipo_usuario = $request->tipo_usuario;
         $user->assignRole('Admin');
 
         $user->save();
- 
+
 
         // return redirect()->route('admin.users.edit', $user)->with('info' , 'Creado exito');
         return $this->index();
-       
-        
+
+
     }
 
     /**
@@ -105,7 +105,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        $roles = Role::all();      
+        $roles = Role::all();
 
         // dd($user);
 
@@ -127,28 +127,28 @@ class UserController extends Controller
         //     'email' => 'required',
         //     'escuela' => 'required',
         //     'password' => 'required',
-            
+
         // ]);
-        
+
         // if($validador->fails())
         // {
             // return response()->json(['status_code' => 400, 'message' => 'Mala peticion']);
             // return $this->edit($user)->with('info', 'Completa todos los ca'); // esta linea estamodo prueba
-        // } 
-         
-        
+        // }
+
+
         if ($request->password != null) {
             # code...
             $user->password = Hash::make( $request->password );
-        } 
-        
+        }
+
         $user->dni = $request->dni;
         $user->name = $request->name;
         $user->apellido_paterno = $request->apellido_paterno;
         $user->apellido_materno = $request->apellido_materno;
         $user->email = $request->email;
         $user->celular = $request->celular;
-         
+
         $user->update();
 
         // return redirect()->route('admin.users.edit', $user)->with('info' , 'Actualizado exito');
